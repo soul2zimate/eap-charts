@@ -1,0 +1,68 @@
+# Install a MicroProfile Application
+:toc:               left
+:icons:             font
+:idprefix:
+:idseparator:       -
+:keywords:          openshift,wildfly,microprofile,helm
+
+This example shows how to deploy a Java application with EAP XP 5 on OpenShift.
+
+## Prerequisites
+
+## Source Code
+
+The source code for the backend is hosted at https://github.com/jboss-eap-up-and-running/eap-xp5-getting-started.git
+
+It is a simple application that uses JAX-RS to exposes HTTP endpoint.
+
+## Installation
+
+The application is built with Bootable Jar.
+
+### Installation with Bootable Jar
+
+The application can be compiled as a Bootable Jar.
+In that case, the Helm Chart is configured with `build.mode=bootable-jar`.
+
+[source,options="nowrap"]
+----
+$ helm install eap-xp5-app -f examples/eap-xp5/getting-started/app.yaml ./charts/eap-xp5
+----
+
+## Deployment
+
+Once the chart is installed, let's wait for the application to be built and deployed:
+
+[source,options="nowrap"]
+----
+$ oc get deployment/eap-xp5-app -w
+NAME                      READY   UP-TO-DATE   AVAILABLE   AGE
+eap-xp5-app               0/1     1            0           27s
+...
+eap-xp5-app               1/1     1            1           5m29s
+----
+
+## Use the application
+
+Once the application is deployed on OpenShift, it can be accessed from the route `eap-xp5-app`.
+Let's find the host that we can use to connect to this backend:
+
+[source,options="nowrap"]
+----
+$ oc get route eap-xp5-app -o jsonpath="{.spec.host}"
+eap-xp5-app-jmesnil1-dev.apps.sandbox.x8i5.p1.openshiftapps.com
+----
+
+This value will be different for every installation of the application.
+
+We can then query this application by calling one of its HTTP endpoints from the URL above.
+
+## Clean up
+
+The application can be deleted by running the command:
+
+[source,options="nowrap"]
+----
+$ helm delete eap-xp5-app 
+release "eap-xp5-app " uninstalled
+----
