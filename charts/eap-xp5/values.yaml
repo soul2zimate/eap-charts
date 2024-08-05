@@ -5,6 +5,7 @@ image:
   tag: latest
 build:
   enabled: true
+  uri: https://github.com/jboss-eap-up-and-running/eap-xp5-getting-started.git
   mode: bootable-jar
   bootableJar:
     builderImage: registry.access.redhat.com/ubi8/openjdk-17:latest
